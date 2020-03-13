@@ -2,6 +2,8 @@
 
 namespace Knojector\SteamAuthenticationBundle\User;
 
+use DateTime;
+
 /**
  * @see https://developer.valvesoftware.com/wiki/Steam_Web_API#GetPlayerSummaries_.28v0002.29
  *
@@ -47,17 +49,17 @@ interface SteamUserInterface
     /**
      * @param string $name
      */
-    public function setProfileName(string  $name);
+    public function setProfileName(string $name);
 
     /**
-     * @return \DateTime
+     * @return DateTime|null
      */
-    public function getLastLogOff(): \DateTime;
+    public function getLastLogOff(): ?DateTime;
 
     /**
      * @param int $lastLogOff
      */
-    public function setLastLogOff(int $lastLogOff);
+    public function setLastLogOff(?int $lastLogOff);
 
     /**
      * @return int
@@ -110,9 +112,9 @@ interface SteamUserInterface
     public function setPrimaryClanId(int $clanId);
 
     /**
-     * @return \DateTime|null
+     * @return DateTime|null
      */
-    public function getJoinDate(): ?\DateTime;
+    public function getJoinDate(): ?DateTime;
 
     /**
      * @param int|null $joinDate

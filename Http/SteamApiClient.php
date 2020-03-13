@@ -40,7 +40,21 @@ class SteamApiClient
      */
     public function loadProfile(int $steamId)
     {
-        $url = sprintf('%s/ISteamUser/GetPlayerSummaries/v0002/?key=%s&steamids=%s', self::STEAM_API, $this->apiKey, $steamId);
+        $profiles = $this->loadProfiles([$steamId]);
+        $userData = current($profiles);
+        return $userData;
+    }
+
+    /**
+     * @param int[] $steamIds
+     *
+     * @return array
+     *
+     * @throws InvalidApiResponseException
+     */
+    public function loadProfiles(array $steamIds)
+    {
+        $url = sprintf('%s/ISteamUser/GetPlayerSummaries/v0002/?key=%s&steamids=%s', self::STEAM_API, $this->apiKey, implode(',', $steamIds));
 
         $data = json_decode($this->client->get($url)->getBody()->getContents(), true);
 
@@ -48,11 +62,10 @@ class SteamApiClient
             throw new InvalidApiResponseException('The received API response is invalid.');
         }
 
-        $userData = current($data['response']['players']);
-        if (false === $userData) {
-            throw new InvalidApiResponseException('The received API response does not contain a user.');
+        if (count($data['response']['players']) === 0) {
+            throw new InvalidApiResponseException('The received API response does not contain users.');
         }
 
-        return $userData;
+        return $data['response']['players'];
     }
 }

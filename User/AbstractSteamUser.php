@@ -2,6 +2,7 @@
 
 namespace Knojector\SteamAuthenticationBundle\User;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\Role\Role;
@@ -40,7 +41,7 @@ abstract class AbstractSteamUser implements SteamUserInterface, UserInterface
     protected $profileName;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(type="datetime")
      */
@@ -82,7 +83,7 @@ abstract class AbstractSteamUser implements SteamUserInterface, UserInterface
     protected $primaryClanId;
 
     /**
-     * @var \DateTime|null
+     * @var DateTime|null
      *
      * @ORM\Column(type="datetime", nullable=true)
      */
@@ -169,7 +170,7 @@ abstract class AbstractSteamUser implements SteamUserInterface, UserInterface
     /**
      * {@inheritdoc}
      */
-    public function getLastLogOff(): \DateTime
+    public function getLastLogOff(): ?DateTime
     {
         return $this->lastLogOff;
     }
@@ -177,9 +178,9 @@ abstract class AbstractSteamUser implements SteamUserInterface, UserInterface
     /**
      * {@inheritdoc}
      */
-    public function setLastLogOff(int $lastLogOff)
+    public function setLastLogOff(?int $lastLogOff)
     {
-        $lastLogOffDate = new \DateTime();
+        $lastLogOffDate = new DateTime();
         $lastLogOffDate->setTimestamp($lastLogOff);
         $this->lastLogOff = $lastLogOffDate;
     }
@@ -267,7 +268,7 @@ abstract class AbstractSteamUser implements SteamUserInterface, UserInterface
     /**
      * {@inheritdoc}
      */
-    public function getJoinDate(): ?\DateTime
+    public function getJoinDate(): ?DateTime
     {
         return $this->joinDate;
     }
@@ -278,7 +279,7 @@ abstract class AbstractSteamUser implements SteamUserInterface, UserInterface
     public function setJoinDate(?int $joinDate): void
     {
         if (null !== $joinDate) {
-            $joinDateDate = new \DateTime();
+            $joinDateDate = new DateTime();
             $joinDateDate->setTimestamp($joinDate);
             $joinDate = $joinDateDate;
         }
@@ -333,7 +334,7 @@ abstract class AbstractSteamUser implements SteamUserInterface, UserInterface
     {
         return;
     }
-    
+
     /**
      * @return array
      */
@@ -354,7 +355,7 @@ abstract class AbstractSteamUser implements SteamUserInterface, UserInterface
         $this->setCommunityVisibilityState($userData['communityvisibilitystate']);
         $this->setProfileState($userData['profilestate']);
         $this->setProfileName($userData['personaname']);
-        $this->setLastLogOff($userData['lastlogoff']);
+        $this->setLastLogOff($userData['lastlogoff'] ?? null);
         $this->setCommentPermission(
             isset($userData['commentpermission']) ? $userData['commentpermission'] : 0
         );
